@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventify - Booking</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hover-scale {
+      transition: transform 0.3s;
+    }
+
+    .hover-scale:hover {
+      transform: scale(1.05);
+    }
+
+    .bg-hero {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1531058020387-3be344556be6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .sticky-nav {
+      transition: background-color 0.3s;
+    }
+
+    .sticky-nav.scrolled {
+      background-color: rgba(30, 64, 175, 0.9);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+  <!-- Header -->
+  <header class="sticky top-0 text-white p-4 sticky-nav z-10 bg-blue-800">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-3xl font-bold tracking-tight">Eventify</h1>
+      <nav class="flex items-center gap-4">
+        <a href="index.html" class="hover:underline">Home</a>
+        <select id="languageSelect" class="p-2 rounded-lg bg-white text-black focus:outline-none">
+          <option value="en">English</option>
+          <option value="fil">Filipino</option>
+          <option value="war">Waray</option>
+          <option value="bis">Bisaya</option>
+        </select>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <section class="bg-hero text-white py-20 px-4">
+    <div class="container mx-auto text-center fade-in">
+      <h2 class="text-4xl font-bold mb-4">Manage Your Bookings</h2>
+      <p class="text-lg mb-8">Confirm bookings, send reminders, and handle payments seamlessly with Eventify.</p>
+    </div>
+  </section>
+
+  <main class="container mx-auto px-4 py-12 space-y-12">
+    <!-- Confirm Bookings -->
+    <div class="bg-white p-6 rounded-lg shadow-md hover-scale fade-in">
+      <h3 class="text-2xl font-semibold mb-4">📅 Confirm Bookings</h3>
+      <form class="space-y-4">
+        <input type="text" placeholder="Client Name" class="w-full p-3 border rounded-lg" required />
+        <input type="date" class="w-full p-3 border rounded-lg" required />
+        <input type="text" placeholder="Event Type (e.g., Wedding)" class="w-full p-3 border rounded-lg" required />
+        <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Confirm Booking</button>
+      </form>
+    </div>
+    <!-- Reminders -->
+    <div class="bg-white p-6 rounded-lg shadow-md hover-scale fade-in">
+      <h3 class="text-2xl font-semibold mb-4">⏰ Send Reminders</h3>
+      <form class="space-y-4">
+        <input type="email" placeholder="Client Email" class="w-full p-3 border rounded-lg" required />
+        <input type="datetime-local" class="w-full p-3 border rounded-lg" required />
+        <textarea placeholder="Reminder Message" class="w-full p-3 border rounded-lg" rows="3"></textarea>
+        <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">Send Reminder</button>
+      </form>
+    </div>
+
+    <!-- Task Payments -->
+    <div class="bg-white p-6 rounded-lg shadow-md hover-scale fade-in">
+      <h3 class="text-2xl font-semibold mb-4">💸 Task Payments</h3>
+      <form class="space-y-4">
+        <input type="text" placeholder="Task (e.g., Catering)" class="w-full p-3 border rounded-lg" required />
+        <input type="number" placeholder="Amount (₱)" class="w-full p-3 border rounded-lg" required />
+        <select class="w-full p-3 border rounded-lg">
+          <option>Pending</option>
+          <option>Paid</option>
+          <option>Overdue</option>
+
+          <!-- Confirm Bookings -->
+          <div class="bg-white p-6 rounded-lg shadow-md hover-scale fade-in">
+            <h3 class="text-2xl font-semibold mb-4">📅 Confirm Bookings</h3>
+            <form class="space-y-4">
+              <input type="text" placeholder="Client Name" class="w-full p-3 border rounded-lg" required />
+              <input type="date" class="w-full p-3 border rounded-lg" required />
+              <input type="text" placeholder="Event Type (e.g., Wedding)" class="w-full p-3 border rounded-lg"
+                required />
+              <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">Confirm Booking</button>
+            </form>
+          </div>
+
+          <div class="flex justify-center">
+            <a href="progress.html"
+              class="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold hover-scale inline-block">Save</a>
+          </div>
+      </form>
+    </div>
+  </main>
+</body>
+
+</html>

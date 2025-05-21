@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eventify - Progress Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hover-scale {
+      transition: transform 0.3s;
+    }
+
+    .hover-scale:hover {
+      transform: scale(1.05);
+    }
+
+    .sticky-nav {
+      transition: background-color 0.3s;
+    }
+
+    .sticky-nav.scrolled {
+      background-color: rgba(30, 64, 175, 0.9);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+  <!-- Header -->
+  <header class="sticky top-0 text-white p-4 sticky-nav bg-blue-800 z-10">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-3xl font-bold">Eventify</h1>
+      <nav class="flex items-center gap-4">
+        <a href="index.html" class="hover:underline">Home</a>
+        <select id="languageSelect" class="p-2 rounded-lg bg-white text-black focus:outline-none">
+          <option value="en">English</option>
+          <option value="fil">Filipino</option>
+          <option value="war">Waray</option>
+          <option value="bis">Bisaya</option>
+        </select>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto py-10 px-4 fade-in">
+    <!-- Progress Bar -->
+    <h2 class="text-2xl font-bold mb-4">Your Booking Progress</h2>
+    <div class="w-full bg-gray-300 rounded-full h-6 mb-6">
+      <div class="bg-blue-600 h-6 rounded-full text-right pr-2 text-white font-bold text-sm" style="width: 60%;">60%
+      </div>
+    </div>
+
+    <!-- Checklist -->
+    <h3 class="text-xl font-semibold mb-3">Checklist</h3>
+    <ul class="space-y-3 mb-8">
+      <li class="flex items-center">
+        <input type="checkbox" class="accent-blue-600 mr-2" checked>
+        <span>Selected event type</span>
+      </li>
+      <li class="flex items-center">
+        <input type="checkbox" class="accent-blue-600 mr-2" checked>
+        <span>Chosen a venue</span>
+      </li>
+      <li class="flex items-center">
+        <input type="checkbox" class="accent-blue-600 mr-2">
+        <span>Booked a caterer</span>
+      </li>
+      <li class="flex items-center">
+        <input type="checkbox" class="accent-blue-600 mr-2">
+        <span>Confirmed decor provider</span>
+      </li>
+    </ul>
+
+    <!-- Alerts -->
+    <div class="space-y-4">
+      <div class="p-4 rounded-lg bg-blue-100 text-blue-800 border border-blue-300">
+        ℹ️ Tip: You’re halfway there! Make sure to finalize vendors soon.
+      </div>
+      <div class="p-4 rounded-lg bg-green-100 text-green-800 border border-green-300">
+        ✅ Success! Your venue has been confirmed.
+      </div>
+      <div class="p-4 rounded-lg bg-red-100 text-red-800 border border-red-300">
+        ⚠️ Alert: Caterer booking is pending. Don’t miss out!
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <a href="budgetalloc.html"
+        class="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold hover-scale inline-block">Next</a>
+    </div>
+  </main>
+</body>
+
+</html>

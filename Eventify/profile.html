@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventify - Profile Setup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hover-scale {
+      transition: transform 0.3s;
+    }
+
+    .hover-scale:hover {
+      transform: scale(1.05);
+    }
+
+    .bg-hero {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sticky-nav {
+      transition: background-color 0.3s;
+    }
+
+    .sticky-nav.scrolled {
+      background-color: rgba(30, 64, 175, 0.9);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+
+  <!-- Header -->
+  <header class="sticky top-0 text-white p-4 sticky-nav z-10 bg-blue-800">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-3xl font-bold tracking-tight">Eventify</h1>
+      <nav class="flex items-center gap-4">
+        <a href="index.html" class="hover:underline">Home</a>
+        <select id="languageSelect" class="p-2 rounded-lg bg-white text-black focus:outline-none">
+          <option value="en">English</option>
+          <option value="fil">Filipino</option>
+          <option value="war">Waray</option>
+          <option value="bis">Bisaya</option>
+        </select>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Profile Setup -->
+  <section class="bg-hero text-white">
+    <div class="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-md fade-in">
+      <h2 class="text-2xl font-bold text-center text-white mb-6">Profile Setup</h2>
+      <form class="space-y-5">
+        <!-- Event Type -->
+        <div>
+          <label for="eventType" class="block text-white font-semibold mb-1">Event Type</label>
+          <select id="eventType"
+            class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
+            <option>Wedding</option>
+            <option>Birthday</option>
+            <option>Corporate</option>
+            <option>Festival</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <!-- Date -->
+        <div>
+          <label for="eventDate" class="block text-white font-semibold mb-1">Event Date</label>
+          <input type="date" id="eventDate"
+            class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900">
+        </div>
+
+        <!-- Budget -->
+        <!-- <div>
+          <label for="budget" class="block text-white font-semibold mb-1">Estimated Budget (₱)</label>
+          <input type="number" id="budget" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900" placeholder="Enter your budget">
+        </div> -->
+
+        <!-- Preferences -->
+        <!-- <div>
+          <label for="preferences" class="block text-white font-semibold mb-1">Preferences</label>
+          <textarea id="preferences" rows="4" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900" placeholder="Tell us more about your theme, location, services, etc."></textarea>
+        </div> -->
+        <div class="flex justify-center">
+          <a href="budget.html"
+            class="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold hover-scale inline-block">Save Profile</a>
+        </div>
+
+      </form>
+    </div>
+  </section>
+</body>
+
+</html>

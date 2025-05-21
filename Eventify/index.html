@@ -1,0 +1,492 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Connect to Southern Leyte’s Event Experts</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    .fade-in { animation: fadeIn 1s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .hover-scale { transition: transform 0.3s; }
+    .hover-scale:hover { transform: scale(1.05); }
+    .bg-hero {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    .confetti {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: url('https://images.unsplash.com/photo-1574169207511-4b6b7a8d9a3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') repeat;
+      opacity: 0.3;
+      animation: confettiFall 6s infinite;
+    }
+    @keyframes confettiFall { 0% { background-position: 0 0; } 100% { background-position: 0 120px; } }
+    .sticky-nav { transition: background-color 0.3s; }
+    .sticky-nav.scrolled { background-color: rgba(30, 64, 175, 0.9); }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Header -->
+  <header class="sticky top-0 text-white p-4 sticky-nav z-10">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-3xl font-bold tracking-tight">Eventify</h1>
+      <nav class="flex items-center gap-4">
+        <a href="#home" class="hover:underline">Home</a>
+        <a href="#features" class="hover:underline">Features</a>
+        <a href="#mission" class="hover:underline">Mission & Vision</a>
+        <a href="#inspiration" class="hover:underline">Inspiration</a>
+        <a href="#how-it-works" class="hover:underline">How It Works</a>
+        <a href="#why-leyte" class="hover:underline">Why Leyte</a>
+        <select id="languageSelect" class="p-2 rounded-lg bg-white text-black focus:outline-none">
+          <option value="en">English</option>
+          <option value="fil">Filipino</option>
+          <option value="war">Waray</option>
+          <option value="bis">Bisaya</option>
+        </select>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="bg-hero text-white text-center relative overflow-hidden">
+    <div class="confetti"></div>
+    <div class="container mx-auto px-4 py-32 fade-in">
+      <h2 id="heroTitle" class="text-6xl font-bold mb-6 leading-tight">Connect to Southern Leyte’s Event Experts</h2>
+      <p id="heroSubtitle" class="text-2xl mb-8 max-w-3xl mx-auto">Eventify bridges you to top vendors across Southern Leyte for unforgettable weddings, birthdays, and celebrations.</p>
+      <p id="heroSecondary" class="text-lg mb-12 max-w-2xl mx-auto">From Maasin’s vibrant markets to Sogod Bay’s coastal charm, we connect you with trusted event planning businesses with ease.</p>
+      <div class="flex justify-center gap-6">
+        <a href="#get-started" class="bg-yellow-400 text-gray-800 px-10 py-4 rounded-full hover:bg-yellow-500 hover-scale text-lg">Get on iOS</a>
+        <a href="#get-started" class="bg-yellow-400 text-gray-800 px-10 py-4 rounded-full hover:bg-yellow-500 hover-scale text-lg">Get on Android</a>
+      </div>
+      <a href="login.html" class="mt-6 inline-block text-white underline hover:text-yellow-300 text-lg">Log In    </a> or 
+      <a href="signup.html" class="mt-6 inline-block text-white underline hover:text-yellow-300 text-lg">   Sign Up Free</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 id="featuresTitle" class="text-5xl font-bold text-center text-gray-800 mb-16 fade-in">Plan Your Event with Ease</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover-scale fade-in">
+          <img src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Connecting to Southern Leyte vendors" class="mx-auto mb-6 rounded-full w-24 h-24 object-cover">
+          <h3 id="vendorDiscovery" class="text-2xl font-semibold text-blue-600">Connect to Vendors</h3>
+          <p id="vendorDesc" class="text-gray-600 mt-2">Eventify bridges you to top caterers, decorators, and more across Southern Leyte. Compare prices and reviews in one tap.</p>
+        </div>
+        <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover-scale fade-in">
+          <img src="https://images.pexels.com/photos/53621/calculator-calculation-insurance-finance-53621.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Budget tracking for Southern Leyte events" class="mx-auto mb-6 rounded-full w-24 h-24 object-cover">
+          <h3 id="budgetTracking" class="text-2xl font-semibold text-blue-600">Track Your Budget</h3>
+          <p id="budgetDesc" class="text-gray-600 mt-2">Keep your event finances in check with intuitive tools, pay vendors via GCash, and stay on budget.</p>
+        </div>
+        <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover-scale fade-in">
+          <img src="https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Task organization for Southern Leyte events" class="mx-auto mb-6 rounded-full w-24 h-24 object-cover">
+          <h3 id="taskTimeline" class="text-2xl font-semibold text-blue-600">Organize Tasks</h3>
+          <p id="taskDesc" class="text-gray-600 mt-2">Manage every detail with our task system, even offline in Southern Leyte’s remote areas.</p>
+        </div>
+        <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover-scale fade-in">
+          <img src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Booking vendors in Southern Leyte" class="mx-auto mb-6 rounded-full w-24 h-24 object-cover">
+          <h3 id="booking" class="text-2xl font-semibold text-blue-600">Book with Ease</h3>
+          <p id="bookingDesc" class="text-gray-600 mt-2">Book vendors seamlessly, chat in-app, and pay securely with GCash or cash-on-delivery.</p>
+        </div>
+        <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover-scale fade-in">
+          <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Event inspiration for Southern Leyte" class="mx-auto mb-6 rounded-full w-24 h-24 object-cover">
+          <h3 id="inspirationBoard" class="text-2xl font-semibold text-blue-600">Get Inspired</h3>
+          <p id="inspirationDesc" class="text-gray-600 mt-2">Explore stunning event ideas to spark creativity for your Southern Leyte celebration.</p>
+        </div>
+        <div class="bg-gray-50 p-8 rounded-xl shadow-lg hover-scale fade-in">
+          <img src="https://images.pexels.com/photos/3184430/pexels-photo-3184430.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Community engagement in Southern Leyte" class="mx-auto mb-6 rounded-full w-24 h-24 object-cover">
+          <h3 id="communityFeed" class="text-2xl font-semibold text-blue-600">Join the Community</h3>
+          <p id="communityDesc" class="text-gray-600 mt-2">Connect with Southern Leyte locals to share tips and event planning ideas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission & Vision Section -->
+  <section id="mission" class="py-20 bg-gradient-to-r from-yellow-100 to-pink-100 text-center">
+    <div class="container mx-auto px-4 fade-in">
+      <h2 id="missionTitle" class="text-5xl font-bold text-gray-800 mb-12">Our Heart for Southern Leyte</h2>
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Southern Leyte landscape" class="mx-auto mb-6 rounded-xl w-64 h-40 object-cover">
+      <p class="text-lg text-gray-600 mb-10 max-w-3xl mx-auto">Eventify bridges customers to Southern Leyte’s vibrant event planning businesses for unforgettable celebrations.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+        <div class="bg-white p-8 rounded-xl shadow-lg hover-scale border-4 border-yellow-400">
+          <h3 class="text-2xl font-semibold text-orange-600">🌟 Mission</h3>
+          <p id="missionDesc" class="text-gray-600 mt-4">To connect budget-conscious customers with event planning businesses across Southern Leyte, simplifying planning and delivering joy.</p>
+        </div>
+        <div class="bg-white p-8 rounded-xl shadow-lg hover-scale border-4 border-yellow-400">
+          <h3 class="text-2xl font-semibold text-orange-600">🔭 Vision</h3>
+          <p id="visionDesc" class="text-gray-600 mt-4">To be Southern Leyte’s go-to platform for seamless event planning, uniting dreams with local expertise.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Inspiration Gallery Section -->
+  <section id="inspiration" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 id="inspirationTitle" class="text-5xl font-bold text-center text-gray-800 mb-12 fade-in">Get Inspired for Your Event</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="hover-scale fade-in">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Sogod Bay beach wedding" class="w-full h-64 object-cover rounded-xl shadow-lg mb-4">
+          <p id="inspiration1" class="text-gray-600 text-center">Dreamy Beach Weddings in Sogod Bay</p>
+        </div>
+        <div class="hover-scale fade-in">
+          <img src="https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Colorful Maasin market" class="w-full h-64 object-cover rounded-xl shadow-lg mb-4">
+          <p id="inspiration2" class="text-gray-600 text-center">Vibrant Maasin Markets</p>
+        </div>
+        <div class="hover-scale fade-in">
+          <img src="https://images.unsplash.com/photo-1543332164-6e82f355badc?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Traditional Southern Leyte cultural dance" class="w-full h-64 object-cover rounded-xl shadow-lg mb-4">
+          <p id="inspiration3" class="text-gray-600 text-center">Cultural Celebrations in Southern Leyte</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="py-20 bg-gradient-to-r from-blue-100 to-green-100">
+    <div class="container mx-auto px-4">
+      <h2 id="howItWorksTitle" class="text-5xl font-bold text-center text-gray-800 mb-12 fade-in">How Eventify Connects You to Vendors</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-5xl mx-auto">
+        <div class="text-center fade-in">
+          <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="Define your event vision in Southern Leyte" class="mx-auto mb-4 rounded-full w-20 h-20 object-cover">
+          <h3 id="step1Title" class="text-xl font-semibold text-blue-600">Step 1: Define Your Vision</h3>
+          <p id="step1Desc" class="text-gray-600">Outline your event goals and theme to find the perfect vendors across Southern Leyte.</p>
+        </div>
+        <div class="text-center fade-in">
+          <img src="https://images.pexels.com/photos/3171837/pexels-photo-3171837.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Choose vendors in Southern Leyte" class="mx-auto mb-4 rounded-full w-20 h-20 object-cover">
+          <h3 id="step2Title" class="text-xl font-semibold text-blue-600">Step 2: Choose Vendors</h3>
+          <p id="step2Desc" class="text-gray-600">Eventify connects you to trusted vendors for catering, decor, and more to bring your vision to life.</p>
+        </div>
+        <div class="text-center fade-in">
+          <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Celebrate in Southern Leyte" class="mx-auto mb-4 rounded-full w-20 h-20 object-cover">
+          <h3 id="step3Title" class="text-xl font-semibold text-blue-600">Step 3: Celebrate</h3>
+          <p id="step3Desc" class="text-gray-600">Book vendors, manage plans in-app, and enjoy a stress-free celebration!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Southern Leyte Section -->
+  <section id="why-leyte" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 id="whyLeyteTitle" class="text-5xl font-bold text-center text-gray-800 mb-12 fade-in">Why Celebrate in Southern Leyte?</h2>
+      <div class="flex flex-col md:flex-row items-center gap-10 fade-in">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Sogod Bay’s coastal charm" class="w-full md:w-1/2 h-80 object-cover rounded-xl shadow-lg">
+        <div class="text-center md:text-left">
+          <p id="whyLeyteDesc" class="text-lg text-gray-600">Southern Leyte shines with vibrant markets and stunning beaches. Eventify connects you to event planners across the region, from Maasin’s colorful stalls to Sogod Bay’s coastal charm, for unforgettable celebrations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Extra Benefits Section -->
+  <section id="get-started" class="py-20 bg-gradient-to-r from-blue-600 to-blue-800 text-white text-center">
+    <div class="container mx-auto px-4 fade-in">
+      <h2 id="benefitsTitle" class="text-5xl font-bold mb-12">More Reasons to Plan with Eventify</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+        <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg hover-scale">
+          <img src="https://images.unsplash.com/photo-1520869562399-e772f042f422?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Offline event planning in Southern Leyte" class="mx-auto mb-4 rounded-full w-20 h-20 object-cover">
+          <h3 id="offlineMode" class="text-xl font-semibold text-blue-600">Plan Offline</h3>
+          <p id="offlineDesc" class="text-gray-600">Access vendor lists and budgets without internet, ideal for Southern Leyte’s remote areas.</p>
+        </div>
+        <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg hover-scale">
+          <img src="https://images.unsplash.com/photo-1503095396549-807759245b35?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Rain backup plan for Southern Leyte events" class="mx-auto mb-4 rounded-full w-20 h-20 object-cover">
+          <h3 id="emergencyChecklist" class="text-xl font-semibold text-blue-600">Stay Prepared</h3>
+          <p id="emergencyDesc" class="text-gray-600">Get backup plans for rain or outages to keep your celebration unstoppable.</p>
+        </div>
+        <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg hover-scale">
+          <img src="https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Vendor reviews in Southern Leyte" class="mx-auto mb-4 rounded-full w-20 h-20 object-cover">
+          <h3 id="ratingsReviews" class="text-xl font-semibold text-blue-600">Trust Vendors</h3>
+          <p id="ratingsDesc" class="text-gray-600">Read and leave reviews to choose the best vendors for your event.</p>
+        </div>
+        <div class="bg-white text-gray-800 p-8 rounded-xl shadow-lg hover-scale">
+          <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Colorful Southern Leyte decorations" class="mx-auto mb-4 rounded-full w-20 h-20 object-cover">
+          <h3 id="localVibes" class="text-xl font-semibold text-blue-600">Vibrant Vibes</h3>
+          <p id="localDesc" class="text-gray-600">Celebrate with Southern Leyte’s colorful flair, from beach weddings to lively events.</p>
+        </div>
+      </div>
+      <h2 id="getStartedTitle" class="text-5xl font-bold mt-12 mb-6">Ready to Start Your Celebration?</h2>
+      <p id="getStartedDesc" class="text-lg mb-10 max-w-2xl mx-auto">Download Eventify now and connect with Southern Leyte’s event planning experts.</p>
+      <div class="flex justify-center gap-6">
+        <a href="#" class="bg-yellow-400 text-gray-800 px-10 py-4 rounded-full hover:bg-yellow-500 hover-scale text-lg">Get on iOS</a>
+        <a href="#" class="bg-yellow-400 text-gray-800 px-10 py-4 rounded-full hover:bg-yellow-500 hover-scale text-lg">Get on Android</a>
+      </div>
+      <a href="#" class="mt-6 inline-block text-white underline hover:text-yellow-300 text-lg">Sign Up Free</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-blue-800 text-white py-12">
+    <div class="container mx-auto px-4 text-center">
+      <p id="footerText" class="text-sm">© 2025 Eventify. Bridging you to Southern Leyte’s event experts with joy and ease.</p>
+      <div class="mt-6 flex justify-center gap-6">
+        <a href="#" class="text-white hover:underline">Privacy Policy</a>
+        <a href="#" class="text-white hover:underline">Terms of Service</a>
+        <a href="#" class="text-white hover:underline">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Translation data
+    const translations = {
+      en: {
+        heroTitle: "Connect to Southern Leyte’s Event Experts",
+        heroSubtitle: "Eventify bridges you to top vendors across Southern Leyte for unforgettable weddings, birthdays, and celebrations.",
+        heroSecondary: "From Maasin’s vibrant markets to Sogod Bay’s coastal charm, we connect you with trusted event planning businesses with ease.",
+        featuresTitle: "Plan Your Event with Ease",
+        vendorDiscovery: "Connect to Vendors",
+        vendorDesc: "Eventify bridges you to top caterers, decorators, and more across Southern Leyte. Compare prices and reviews in one tap.",
+        budgetTracking: "Track Your Budget",
+        budgetDesc: "Keep your event finances in check with intuitive tools, pay vendors via GCash, and stay on budget.",
+        taskTimeline: "Organize Tasks",
+        taskDesc: "Manage every detail with our task system, even offline in Southern Leyte’s remote areas.",
+        booking: "Book with Ease",
+        bookingDesc: "Book vendors seamlessly, chat in-app, and pay securely with GCash or cash-on-delivery.",
+        inspirationBoard: "Get Inspired",
+        inspirationDesc: "Explore stunning event ideas to spark creativity for your Southern Leyte celebration.",
+        communityFeed: "Join the Community",
+        communityDesc: "Connect with Southern Leyte locals to share tips and event planning ideas.",
+        missionTitle: "Our Heart for Southern Leyte",
+        missionDesc: "To connect budget-conscious customers with event planning businesses across Southern Leyte, simplifying planning and delivering joy.",
+        visionDesc: "To be Southern Leyte’s go-to platform for seamless event planning, uniting dreams with local expertise.",
+        inspirationTitle: "Get Inspired for Your Event",
+        inspiration1: "Dreamy Beach Weddings in Sogod Bay",
+        inspiration2: "Vibrant Maasin Markets",
+        inspiration3: "Cultural Celebrations in Southern Leyte",
+        howItWorksTitle: "How Eventify Connects You to Vendors",
+        step1Title: "Step 1: Define Your Vision",
+        step1Desc: "Outline your event goals and theme to find the perfect vendors across Southern Leyte.",
+        step2Title: "Step 2: Choose Vendors",
+        step2Desc: "Eventify connects you to trusted vendors for catering, decor, and more to bring your vision to life.",
+        step3Title: "Step 3: Celebrate",
+        step3Desc: "Book vendors, manage plans in-app, and enjoy a stress-free celebration!",
+        whyLeyteTitle: "Why Celebrate in Southern Leyte?",
+        whyLeyteDesc: "Southern Leyte shines with vibrant markets and stunning beaches. Eventify connects you to event planners across the region, from Maasin’s colorful stalls to Sogod Bay’s coastal charm, for unforgettable celebrations.",
+        benefitsTitle: "More Reasons to Plan with Eventify",
+        offlineMode: "Plan Offline",
+        offlineDesc: "Access vendor lists and budgets without internet, ideal for Southern Leyte’s remote areas.",
+        emergencyChecklist: "Stay Prepared",
+        emergencyDesc: "Get backup plans for rain or outages to keep your celebration unstoppable.",
+        ratingsReviews: "Trust Vendors",
+        ratingsDesc: "Read and leave reviews to choose the best vendors for your event.",
+        localVibes: "Vibrant Vibes",
+        localDesc: "Celebrate with Southern Leyte’s colorful flair, from beach weddings to lively events.",
+        getStartedTitle: "Ready to Start Your Celebration?",
+        getStartedDesc: "Download Eventify now and connect with Southern Leyte’s event planning experts.",
+        footerText: "© 2025 Eventify. Bridging you to Southern Leyte’s event experts with joy and ease."
+      },
+      fil: {
+        heroTitle: "Kumonekta sa Mga Eksperto sa Event ng Southern Leyte",
+        heroSubtitle: "Ikinokonekta ka ng Eventify sa mga nangungunang vendor sa buong Southern Leyte para sa di-malilimutang kasalan, kaarawan, at pagdiriwang.",
+        heroSecondary: "Mula sa makulay na pamilihan ng Maasin hanggang sa coastal charm ng Sogod Bay, ikinokonekta ka namin sa pinagkakatiwalaang negosyo sa event planning nang madali.",
+        featuresTitle: "Planuhin ang Iyong Event nang Madali",
+        vendorDiscovery: "Kumonekta sa mga Vendor",
+        vendorDesc: "Ikinokonekta ka ng Eventify sa mga top caterers, dekorasyon, at iba pa sa buong Southern Leyte. Ihambing ang presyo at review sa isang tap.",
+        budgetTracking: "Subaybayan ang Badyet",
+        budgetDesc: "Panatilihin ang kontrol sa iyong event finances gamit ang intuitive tools, magbayad sa vendor gamit ang GCash, at manatili sa badyet.",
+        taskTimeline: "Ayusin ang mga Gawain",
+        taskDesc: "Pamahalaan ang bawat detalye gamit ang aming task system, kahit offline sa malalayong lugar ng Southern Leyte.",
+        booking: "Mag-book nang Madali",
+        bookingDesc: "Mag-book ng vendor nang walang kahirap-hirap, makipag-chat sa app, at magbayad nang secure gamit ang GCash o cash-on-delivery.",
+        inspirationBoard: "Maghanap ng Inspirasyon",
+        inspirationDesc: "Tuklasin ang mga kahanga-hangang ideya sa event upang pasiglahin ang iyong malikhaing pag-iisip para sa pagdiriwang sa Southern Leyte.",
+        communityFeed: "Sumali sa Komunidad",
+        communityDesc: "Makipag-ugnayan sa mga lokal sa Southern Leyte para magbahagi ng tips at ideya sa event planning.",
+        missionTitle: "Ang Aming Puso para sa Southern Leyte",
+        missionDesc: "Upang ikonekta ang mga kliyenteng may kamalayan sa badyet sa mga negosyo sa event planning sa buong Southern Leyte, na nagpapasimple sa pagpaplano at naghahatid ng saya.",
+        visionDesc: "Upang maging pangunahing platform ng Southern Leyte para sa walang stress na event planning, na pinag-iisa ang mga pangarap sa lokal na kadalubhasaan.",
+        inspirationTitle: "Maghanap ng Inspirasyon para sa Iyong Event",
+        inspiration1: "Pangarap na Beach Weddings sa Sogod Bay",
+        inspiration2: "Makulay na Pamilihan ng Maasin",
+        inspiration3: "Kultural na Pagdiriwang sa Southern Leyte",
+        howItWorksTitle: "Paano Ikinokonekta ng Eventify ang mga Vendor",
+        step1Title: "Hakbang 1: Tukuyin ang Iyong Bisyon",
+        step1Desc: "Ilarawan ang iyong mga layunin at tema ng event upang mahanap ang perpektong vendor sa buong Southern Leyte.",
+        step2Title: "Hakbang 2: Pumili ng Vendor",
+        step2Desc: "Ikinokonekta ka ng Eventify sa mga pinagkakatiwalaang vendor para sa catering, dekorasyon, at iba pa upang buhayin ang iyong bisyon.",
+        step3Title: "Hakbang 3: Magdiwang",
+        step3Desc: "Mag-book ng vendor, pamahalaan ang mga plano sa app, at i-enjoy ang walang stress na pagdiriwang!",
+        whyLeyteTitle: "Bakit Magdiwang sa Southern Leyte?",
+        whyLeyteDesc: "Ang Southern Leyte ay nagniningning sa makulay na pamilihan at magagandang beach. Ikinokonekta ka ng Eventify sa mga event planner sa buong rehiyon, mula sa makulay na stalls ng Maasin hanggang sa coastal charm ng Sogod Bay, para sa di-malilimutang pagdiriwang.",
+        benefitsTitle: "Mas Maraming Dahilan para Magplano kasama ang Eventify",
+        offlineMode: "Magplano Offline",
+        offlineDesc: "I-access ang listahan ng vendor at badyet kahit walang internet, perpekto para sa malalayong lugar sa Southern Leyte.",
+        emergencyChecklist: "Manatiling Handa",
+        emergencyDesc: "Kumuha ng backup plans para sa ulan o pagkawala ng kuryente upang mapanatiling hindi mapigilan ang iyong pagdiriwang.",
+        ratingsReviews: "Pagkatiwalaan ang Vendor",
+        ratingsDesc: "Basahin at mag-iwan ng review para pumili ng pinakamahusay na vendor para sa iyong event.",
+        localVibes: "Masiglang Vibes",
+        localDesc: "Magdiwang gamit ang makulay na flair ng Southern Leyte, mula sa beach weddings hanggang makulay na mga event.",
+        getStartedTitle: "Handa na bang Simulan ang Iyong Pagdiriwang?",
+        getStartedDesc: "I-download ang Eventify ngayon at kumonekta sa mga eksperto sa event planning ng Southern Leyte.",
+        footerText: "© 2025 Eventify. Ikinokonekta ka sa mga eksperto sa event ng Southern Leyte nang may saya at kadalian."
+      },
+      war: {
+        heroTitle: "Makig-ugnay ha Mga Eksperto han Evento han Southern Leyte",
+        heroSubtitle: "Ginuugnayan ka han Eventify ha mga top vendor ha bug-os nga Southern Leyte para ha di-makakalimtan nga kasal, adlawng natawhan, ngan selebrasyon.",
+        heroSecondary: "Tikang ha makusog nga pamilihan han Maasin kutob ha coastal charm han Sogod Bay, ginuugnayan ka namon ha pinagkakasaligan nga negosyo han event planning hin kadali.",
+        featuresTitle: "Planoha an Imo Evento hin Kadali",
+        vendorDiscovery: "Makig-ugnay ha mga Vendor",
+        vendorDesc: "Ginuugnayan ka han Eventify ha mga top caterers, dekorasyon, ngan iba pa tikang ha bug-os nga Southern Leyte. I-kompara an presyo ngan review hin usa ka tap.",
+        budgetTracking: "Subayon an Badyet",
+        budgetDesc: "Ipadayon an kontrol ha imo event finances gamit an intuitive tools, magbayad ha vendor gamit an GCash, ngan magpabilin ha badyet.",
+        taskTimeline: "Organisahon an mga Buluhaton",
+        taskDesc: "Dumara hin kada detalye gamit an amon task system, bisan offline ha hilarom nga mga lugar han Southern Leyte.",
+        booking: "Mag-book nga Waray Hasol",
+        bookingDesc: "Waray kahirap-hirap nga mag-book hin vendor, makig-chat ha app, ngan magbayad nga sigurado gamit an GCash o cash-on-delivery.",
+        inspirationBoard: "Kumuha hin Inspirasyon",
+        inspirationDesc: "Tukibon an mga matahum nga ideya han evento para magduso han imo malikhaon nga pag-iisip para ha selebrasyon ha Southern Leyte.",
+        communityFeed: "Sumali ha Komunidad",
+        communityDesc: "Makig-ugnay ha mga lokal ha Southern Leyte para magbahin hin tips ngan ideya han event planning.",
+        missionTitle: "An Amo Puso para ha Southern Leyte",
+        missionDesc: "Para ugnayon an mga kliyente nga may kahibaro ha badyet ha mga negosyo han event planning ha bug-os nga Southern Leyte, nga nagpapasimple han pagplano ngan naghahatud hin kasadya.",
+        visionDesc: "Para magin an pangunahon nga platform han Southern Leyte para ha waray stress nga event planning, nga ginpapakig-usa an mga damgo upod an lokal nga kadalubhasaan.",
+        inspirationTitle: "Kumuha hin Inspirasyon para ha Imo Evento",
+        inspiration1: "Damgo nga Beach Weddings ha Sogod Bay",
+        inspiration2: "Makusog nga Pamilihan han Maasin",
+        inspiration3: "Kultural nga Selebrasyon ha Southern Leyte",
+        howItWorksTitle: "Kun Paano Ginuugnayan han Eventify an mga Vendor",
+        step1Title: "Lakang 1: Ilarawan an Imo Bisyon",
+        step1Desc: "Ilarawan an imo mga tumong ngan tema han evento para makita an perpekto nga vendor ha bug-os nga Southern Leyte.",
+        step2Title: "Lakang 2: Pumili hin Vendor",
+        step2Desc: "Ginuugnayan ka han Eventify ha mga pinagkakasaligan nga vendor para ha catering, dekorasyon, ngan iba pa para mapadangat an imo bisyon.",
+        step3Title: "Lakang 3: Magselebrar",
+        step3Desc: "Mag-book hin vendor, dumara hin mga plano ha app, ngan i-enjoy an imo waray stress nga selebrasyon!",
+        whyLeyteTitle: "Kay Ano Magselebrar ha Southern Leyte?",
+        whyLeyteDesc: "An Southern Leyte nagdadangat hin makusog nga pamilihan ngan matahum nga mga baybay. Ginuugnayan ka han Eventify ha mga event planner ha bug-os nga rehiyon, tikang ha makusog nga stalls han Maasin kutob ha coastal charm han Sogod Bay, para ha di-makakalimtan nga selebrasyon.",
+        benefitsTitle: "Duro nga Rason para Magplano upod an Eventify",
+        offlineMode: "Magplano Offline",
+        offlineDesc: "I-access an listahan han vendor ngan badyet bisan waray internet, perpekto para ha hilarom nga mga lugar han Southern Leyte.",
+        emergencyChecklist: "Magpabilin nga Andam",
+        emergencyDesc: "Kumuha hin backup plans para ha uran o pagkawala hin kuryente para magpadayon an imo selebrasyon nga waray makabibiling.",
+        ratingsReviews: "Pagsalig ha Vendor",
+        ratingsDesc: "Basaha ngan magbilin hin review para makapili hin pinakamaupay nga vendor para ha imo evento.",
+        localVibes: "Masadya nga Vibes",
+        localDesc: "Magselebrar gamit an makusog nga flair han Southern Leyte, tikang ha beach weddings kutob ha makusog nga mga evento.",
+        getStartedTitle: "Andam na ba Magsugod han Imo Selebrasyon?",
+        getStartedDesc: "I-download an Eventify niyan ngan makig-ugnay ha mga eksperto han event planning han Southern Leyte.",
+        footerText: "© 2025 Eventify. Ginuugnayan ka ha mga eksperto han event han Southern Leyte hin may kasadya ngan kadali."
+      },
+      bis: {
+        heroTitle: "Makig-ugnay sa mga Eksperto sa Evento sa Southern Leyte",
+        heroSubtitle: "Gikonekta ka sa Eventify sa mga top vendor sa tibuok Southern Leyte para sa di-makalimtan nga kasal, adlawng natawhan, ug selebrasyon.",
+        heroSecondary: "Gikan sa buhi nga pamilihan sa Maasin ngadto sa coastal charm sa Sogod Bay, gikonekta ka namo sa kasaligang negosyo sa event planning nga may kasayon.",
+        featuresTitle: "Planoa ang Imong Evento nga Sayon",
+        vendorDiscovery: "Makig-ugnay sa mga Vendor",
+        vendorDesc: "Gikonekta ka sa Eventify sa mga top caterers, dekorasyon, ug uban pa gikan sa tibuok Southern Leyte. Itandi ang presyo ug review sa usa ka tap.",
+        budgetTracking: "Subayon ang Badyet",
+        budgetDesc: "Ipadayon ang kontrol sa imong event finances gamit ang intuitive tools, magbayad sa vendor gamit ang GCash, ug magpabilin sa badyet.",
+        taskTimeline: "Organisahon ang mga Buluhaton",
+        taskDesc: "Dumalahon ang kada detalye gamit ang among task system, bisan offline sa hilit nga mga lugar sa Southern Leyte.",
+        booking: "Mag-book nga Sayon",
+        bookingDesc: "Walay kahago nga mag-book og vendor, makig-chat sa app, ug magbayad nga sigurado gamit ang GCash o cash-on-delivery.",
+        inspirationBoard: "Pangitaa og Inspirasyon",
+        inspirationDesc: "Diskubrehon ang mga nindot nga ideya sa evento aron mapukaw ang imong malikhaon nga paghunahuna para sa selebrasyon sa Southern Leyte.",
+        communityFeed: "Apil sa Komunidad",
+        communityDesc: "Makig-ugnay sa mga lokal sa Southern Leyte aron ipaambit ang mga tip ug ideya sa event planning.",
+        missionTitle: "Ang Among Kasingkasing para sa Southern Leyte",
+        missionDesc: "Aron ikonekta ang mga kliyente nga may kahibalo sa badyet sa mga negosyo sa event planning sa tibuok Southern Leyte, nga nagpasayon sa pagplano ug naghatod og kalipay.",
+        visionDesc: "Aron mahimong pangunahing platform sa Southern Leyte para sa walay stress nga event planning, nga gipanag-usa ang mga damgo sa lokal nga kahanas.",
+        inspirationTitle: "Pangitaa og Inspirasyon para sa Imong Evento",
+        inspiration1: "Damgo nga Beach Weddings sa Sogod Bay",
+        inspiration2: "Buhi nga Pamilihan sa Maasin",
+        inspiration3: "Kultural nga Selebrasyon sa Southern Leyte",
+        howItWorksTitle: "Giunsa sa Eventify Pagkonekta sa mga Vendor",
+        step1Title: "Lakang 1: Ilarawan ang Imong Bisyon",
+        step1Desc: "Ilarawan ang imong mga tumong ug tema sa evento aron makit-an ang perpektong vendor sa tibuok Southern Leyte.",
+        step2Title: "Lakang 2: Pilia ang Vendor",
+        step2Desc: "Gikonekta ka sa Eventify sa kasaligang vendor para sa catering, dekorasyon, ug uban pa aron mabuhi ang imong bisyon.",
+        step3Title: "Lakang 3: Selebrahan",
+        step3Desc: "Mag-book og vendor, dumalahon ang mga plano sa app, ug i-enjoy ang imong walay stress nga selebrasyon!",
+        whyLeyteTitle: "Ngano Selebrahan sa Southern Leyte?",
+        whyLeyteDesc: "Ang Southern Leyte nagdan-ag sa buhi nga pamilihan ug nindot nga baybay. Gikonekta ka sa Eventify sa mga event planner sa tibuok rehiyon, gikan sa buhi nga stalls sa Maasin ngadto sa coastal charm sa Sogod Bay, para sa di-makalimtan nga selebrasyon.",
+        benefitsTitle: "Daghan pang Rason para Magplano uban ang Eventify",
+        offlineMode: "Magplano Offline",
+        offlineDesc: "I-access ang listahan sa vendor ug badyet bisan walay internet, perpekto para sa hilit nga mga lugar sa Southern Leyte.",
+        emergencyChecklist: "Magpabilin nga Andam",
+        emergencyDesc: "Kuhaa ang mga backup plans para sa ulan o pagkawala og kuryente aron mapadayon ang imong selebrasyon nga dili mapugngan.",
+        ratingsReviews: "Pagsalig sa Vendor",
+        ratingsDesc: "Basaha ug magbilin og review aron makapili og pinakamaayo nga vendor para sa imong evento.",
+        localVibes: "Malipayong Vibes",
+        localDesc: "Selebrahan gamit ang buhi nga flair sa Southern Leyte, gikan sa beach weddings ngadto sa buhi nga mga evento.",
+        getStartedTitle: "Andam na ba Magsugod sa Imong Selebrasyon?",
+        getStartedDesc: "I-download ang Eventify karon ug makig-ugnay sa mga eksperto sa event planning sa Southern Leyte.",
+        footerText: "© 2025 Eventify. Gikonekta ka sa mga eksperto sa event sa Southern Leyte nga may kalipay ug kasayon."
+      }
+    };
+
+    // Translation function
+    document.getElementById("languageSelect").addEventListener("change", function() {
+      const lang = this.value;
+      Object.keys(translations[lang]).forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = translations[lang][id];
+      });
+    });
+
+    // Smooth scrolling for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Sticky nav background change on scroll
+    window.addEventListener('scroll', function() {
+      const header = document.querySelector('.sticky-nav');
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+  </script>
+</body>
+</html>

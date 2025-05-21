@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventify - Event Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hover-scale {
+      transition: transform 0.3s;
+    }
+
+    .hover-scale:hover {
+      transform: scale(1.05);
+    }
+
+    .bg-hero {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1587829741301-dc798b83add3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .sticky-nav {
+      transition: background-color 0.3s;
+    }
+
+    .sticky-nav.scrolled {
+      background-color: rgba(30, 64, 175, 0.9);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+  <!-- Header -->
+  <header class="sticky top-0 text-white p-4 sticky-nav z-10 bg-blue-800">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-3xl font-bold tracking-tight">Eventify</h1>
+      <nav class="flex items-center gap-4">
+        <a href="index.html" class="hover:underline">Home</a>
+        <select id="languageSelect" class="p-2 rounded-lg bg-white text-black focus:outline-none">
+          <option value="en">English</option>
+          <option value="fil">Filipino</option>
+          <option value="war">Waray</option>
+          <option value="bis">Bisaya</option>
+        </select>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-hero text-white text-center p-16 fade-in">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-4xl font-bold mb-4">Your Event Companion</h2>
+      <p class="text-lg">Get real-time updates, contact vendors easily, and stay safe with our emergency list.</p>
+    </div>
+  </section>
+
+  <!-- Access Schedule -->
+  <section id="schedule" class="p-10 fade-in">
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+      <h3 class="text-2xl font-semibold mb-4 text-blue-800">📅 Access Schedule</h3>
+      <ul class="space-y-2">
+        <li class="flex justify-between items-center p-3 bg-gray-100 rounded-lg hover-scale">
+          <span>Opening Ceremony</span><span>8:00 AM</span>
+        </li>
+        <li class="flex justify-between items-center p-3 bg-gray-100 rounded-lg hover-scale">
+          <span>Workshop: Event Planning</span><span>10:00 AM</span>
+        </li>
+        <li class="flex justify-between items-center p-3 bg-gray-100 rounded-lg hover-scale">
+          <span>Networking Lunch</span><span>12:30 PM</span>
+        </li>
+        <li class="flex justify-between items-center p-3 bg-gray-100 rounded-lg hover-scale">
+          <span>Closing Remarks</span><span>4:00 PM</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact Vendors -->
+  <section id="vendors" class="p-10 fade-in">
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+      <h3 class="text-2xl font-semibold mb-4 text-blue-800">📞 Contact Vendors</h3>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="p-4 bg-gray-100 rounded-lg hover-scale">
+          <h4 class="font-semibold">Sound & Lights</h4>
+          <p>Contact: 0917-888-1234</p>
+        </div>
+        <div class="p-4 bg-gray-100 rounded-lg hover-scale">
+          <h4 class="font-semibold">Catering Services</h4>
+          <p>Contact: 0917-234-5678</p>
+        </div>
+        <div class="p-4 bg-gray-100 rounded-lg hover-scale">
+          <h4 class="font-semibold">Event Decor</h4>
+          <p>Contact: 0999-456-7890</p>
+        </div>
+        <div class="p-4 bg-gray-100 rounded-lg hover-scale">
+          <h4 class="font-semibold">Security Services</h4>
+          <p>Contact: 0921-000-4321</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Emergency List -->
+  <section id="emergency" class="p-10 fade-in">
+    <div class="max-w-4xl mx-auto bg-red-50 p-6 rounded-lg shadow-md border border-red-300">
+      <h3 class="text-2xl font-semibold mb-4 text-red-700">🚨 Emergency Contact List</h3>
+      <ul class="space-y-2">
+        <li class="p-3 bg-white rounded-lg hover-scale">
+          <strong>Event Coordinator:</strong> 0917-321-0000
+        </li>
+        <li class="p-3 bg-white rounded-lg hover-scale">
+          <strong>Medical Team:</strong> 0922-999-8888
+        </li>
+        <li class="p-3 bg-white rounded-lg hover-scale">
+          <strong>Local Police:</strong> 911 or 043-123-4567
+        </li>
+        <li class="p-3 bg-white rounded-lg hover-scale">
+          <strong>Fire Department:</strong> 034-789-0000
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="flex justify-center">
+    <a href="post.html"
+      class="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold hover-scale inline-block">Next</a>
+  </div>
+
+  <script>
+    // Sticky nav background on scrollK
+    window.addEventListener('scroll', function () {
+      const nav = document.querySelector('.sticky-nav');
+      nav.classList.toggle('scrolled', window.scrollY > 10);
+    });
+  </script>
+</body>
+
+</html>

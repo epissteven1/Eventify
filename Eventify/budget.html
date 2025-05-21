@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Analyzer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .fade-in {
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hover-scale {
+      transition: transform 0.3s;
+    }
+
+    .hover-scale:hover {
+      transform: scale(1.05);
+    }
+
+    .bg-hero {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    .sticky-nav {
+      transition: background-color 0.3s;
+    }
+
+    .sticky-nav.scrolled {
+      background-color: rgba(30, 64, 175, 0.9);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+  <!-- Header -->
+  <header class="sticky top-0 text-white p-4 sticky-nav z-10 bg-blue-800">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-3xl font-bold tracking-tight">Eventify</h1>
+      <nav class="flex items-center gap-4">
+        <a href="index.html" class="hover:underline">Home</a>
+        <select id="languageSelect" class="p-2 rounded-lg bg-white text-black focus:outline-none">
+          <option value="en">English</option>
+          <option value="fil">Filipino</option>
+          <option value="war">Waray</option>
+          <option value="bis">Bisaya</option>
+        </select>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Budget Analyzer Section -->
+  <section class="bg-hero text-white min-h-screen flex items-center justify-center">
+    <!-- <h2 class="text-4xl font-semibold mb-6 fade-in">Budget Analyzer</h2> -->
+    <div class="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-md fade-in">
+      <label for="totalBudget" class="block text-xl mb-2">Enter Total Budget</label>
+      <input type="number" id="totalBudget" class="p-3 w-full mb-6 border rounded-lg text-black"
+        placeholder="Enter total budget" />
+
+      <!-- <h3 class="text-2xl font-semibold mb-4">Set Priorities</h3>
+      <div class="space-y-4 mb-6">
+        <div>
+          <label for="gown" class="block text-lg">Gown</label>
+          <input type="number" id="gown" class="p-2 w-full border rounded-lg text-black"
+            placeholder="Enter budget for gown" />
+        </div>
+        <div>
+          <label for="venue" class="block text-lg">Venue</label>
+          <input type="number" id="venue" class="p-2 w-full border rounded-lg text-black"
+            placeholder="Enter budget for venue" />
+        </div>
+        <div>
+          <label for="photo" class="block text-lg">Photo</label>
+          <input type="number" id="photo" class="p-2 w-full border rounded-lg text-black"
+            placeholder="Enter budget for photo" />
+        </div>
+      </div> -->
+
+      <div class="flex justify-center">
+        <button class="bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold hover-scale inline-block"
+          onclick="redirectToGuestPage()">Analyze Budget</button>
+      </div>
+
+      <div id="result" class="mt-6 text-lg"></div>
+    </div>
+    </div>
+  </section>
+
+  <script>
+    function redirectToGuestPage() {
+      window.location.href = 'vendor.html';  // Redirect to guest.html
+    }
+  </script>
+</body>
+
+</html>
